@@ -1,5 +1,8 @@
+
 import React, { Component } from 'react';
 import Keycloak from 'keycloak-js';
+import UserInfo from './UserInfo';
+import Logout from './Logout';
 
 class Secured extends Component {
 
@@ -9,23 +12,19 @@ class Secured extends Component {
     }
 
     componentDidMount() {
-        const keycloak = new Keycloak('/keycloak.json');
-        keycloak.init().then(function(authenticated) {
-            alert(authenticated ? 'authenticated' : 'not authenticated');
-        }).catch(function() {
-            alert('failed to initialize');
-        });
-        // keycloak.init({onLoad: 'login-required'}).then(authenticated => {
-        //     this.setState({ keycloak: keycloak, authenticated: authenticated })
-        // })
+        if (!this.props.keycloak) {
+            const keycloak = Keycloak('/keycloak.json');
+            keycloak.init({onLoad: 'login-required'}).then(authenticated => {
+                console.log(keycloak, authenticated);
+                this.props.changeAuthData({keycloak, authenticated})
+            });
+        }
     }
 
     render() {
-        if (this.state.keycloak) {
-            if (this.state.authenticated) return (
+        if(this.props.keycloak) {
+            if(this.props.authenticated) return (
                 <div>
-                    <p>This is a Keycloak-secured component of your application. You shouldn't be able
-                        to see this unless you've authenticated with Keycloak.</p>
                 </div>
             ); else return (<div>Unable to authenticate!</div>)
         }

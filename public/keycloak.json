@@ -1,5 +1,6 @@
 {
   "realm": "testRealm",
   "auth-server-url": "https://84.201.176.223:8443/auth",
-  "clientId": "test"
+  "clientId": "test",
+  "resource": "test"
 }
